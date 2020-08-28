@@ -1,6 +1,8 @@
 ---
-layout: post
-title: Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server
+layout: single
+title: "Builing a Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server"
+categories: container-orchestration kubernetes
+classes: wide
 ---
 
 > I've been needing a dedicated Kubernetes Dev Environment for the longest time - Minkube is great for this. However, the only piece of kit I have available and that's servicable is an old Dell Optiplex. I really didn't want to introduce another screen to my already busy desk so decided that whatever I was going to use for my Dev Environment had to be capable of being *Remote* (remote being under my desk) and *Headless* (command-line or browser only).
@@ -130,26 +132,38 @@ $ VBoxManage modifyvm minikube natpf1 "kubectl,tcp,,43910,,8443"
 
 * Nearly done! We now need to setup our kubeconfig file to use the certificates and API address we configured above.
 
-{% highlight yaml %}
+{% highlight yml %}
 
-    apiVersion: v1
-    clusters:
-    - cluster: 
-        certificate-authority: /home/mrgrumpy/.kube/ca.crt 
-        server: https://10.10.10.38:43910 
-    name: minikube 
-    contexts: 
-    - context: 
-        cluster: minikube 
-        user: minikube 
-    name: minikube 
-    current-context: minikube 
-    kind: Config 
-    preferences: {} 
-    users: 
-    - name: minikube 
-    user: 
-        client-certificate: /home/mrgrumpy/.kube/client.crt 
-        client-key: /home/mrgrumpy/.kube/client.key 
+apiVersion: v1
+clusters:
+- cluster: 
+    certificate-authority: /home/mrgrumpy/.kube/ca.crt 
+    server: https://10.10.10.38:43910 
+name: minikube 
+contexts: 
+- context: 
+    cluster: minikube 
+    user: minikube 
+name: minikube 
+current-context: minikube 
+kind: Config 
+preferences: {} 
+users: 
+- name: minikube 
+user: 
+    client-certificate: /home/mrgrumpy/.kube/client.crt 
+    client-key: /home/mrgrumpy/.kube/client.key 
 
 {% endhighlight %}
+
+* Finally let's test if we can connect to the remote instance of minikube.
+
+{% highlight bash %}
+
+$ kubectl get nodes
+NAME       STATUS   ROLES    AGE   VERSION
+minikube   Ready    master   25h   v1.18.3
+
+{% endhighlight %}
+
+* Thanks for reading!
