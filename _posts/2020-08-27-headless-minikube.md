@@ -113,7 +113,7 @@ $ scp user@server:~/.minikube/ca.crt ~/.kube/ca.crt
 
 * Almost there! Now this is the part that really sets this apart from doing this on a machine with a GUI. We need to configure a Port Forwarding rule on the minikube virtual machine using VirtualBox's tool VBoxManage.
 
-{% highlight bash %}
+{% highlight zsh %}
 
 # Get the minikube VM's network information
 $ VBoxManage showvminfo minikube | grep 'NIC 1 Rule(0)'
@@ -132,28 +132,27 @@ $ VBoxManage modifyvm minikube natpf1 "kubectl,tcp,,43910,,8443"
 
 * Nearly done! We now need to setup our kubeconfig file to use the certificates and API address we configured above.
 
-{% highlight yml %}
-
+{% highlight txt %}
+---
 apiVersion: v1
 clusters:
-- cluster: 
-    certificate-authority: /home/mrgrumpy/.kube/ca.crt 
-    server: https://10.10.10.38:43910 
-name: minikube 
-contexts: 
-- context: 
-    cluster: minikube 
-    user: minikube 
-name: minikube 
-current-context: minikube 
-kind: Config 
-preferences: {} 
-users: 
-- name: minikube 
-user: 
-    client-certificate: /home/mrgrumpy/.kube/client.crt 
-    client-key: /home/mrgrumpy/.kube/client.key 
-
+  - cluster:
+    certificate-authority: /home/mrgrumpy/.kube/ca.crt
+    server: https://10.10.10.38:43910
+name: minikube
+contexts:
+  - context:
+    cluster: minikube
+    user: minikube
+name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+  - name: minikube
+user:
+  client-certificate: /home/mrgrumpy/.kube/client.crt
+  client-key: /home/mrgrumpy/.kube/client.key
 {% endhighlight %}
 
 * Finally let's test if we can connect to the remote instance of minikube.
