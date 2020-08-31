@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Builing a Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server"
+title: "Building a Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server"
 categories: container-orchestration kubernetes
 classes: wide
 ---
