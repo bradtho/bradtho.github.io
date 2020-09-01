@@ -137,8 +137,8 @@ $ VBoxManage modifyvm minikube natpf1 "kubectl,tcp,,43910,,8443"
 apiVersion: v1
 clusters:
   - cluster:
-    certificate-authority: /home/mrgrumpy/.kube/ca.crt
-    server: https:##10.10.10.38:43910
+    certificate-authority: ~/.kube/ca.crt
+    server: https://10.10.10.38:43910
 name: minikube
 contexts:
   - context:
@@ -151,8 +151,8 @@ preferences: {}
 users:
   - name: minikube
 user:
-  client-certificate: /home/mrgrumpy/.kube/client.crt
-  client-key: /home/mrgrumpy/.kube/client.key
+  client-certificate: ~/.kube/client.crt
+  client-key: ~/.kube/client.key
 
 {% endhighlight %}
 
