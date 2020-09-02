@@ -96,7 +96,7 @@ analytics:
 author:
   name             : "Brad Thomas"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "An engineer's not so epic journey"
+  bio              : "Tales of an Engineer who'd rather be outside Gardening"
   location         : "Melbourne, Australia"
   email            : brad.thomas@digio.com.au
   links:
@@ -281,3 +281,10 @@ defaults:
       share: true
       related: true
       show_date: true
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true

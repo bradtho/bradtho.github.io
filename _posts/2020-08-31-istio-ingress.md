@@ -186,4 +186,6 @@ httpbin-558f4b785d-4qwxw   1/1     Running   0          8m40s
 
 ## Make the Application accessible to the outside world
 
-... well your laptop anyways.
+... well to your laptop anyways.
+
+Here's the bit that stumped me about Istio Ingress for the longest time. What's all this Virtual Service nonsense anyways? Well rather than read how about a picture of how it works?
