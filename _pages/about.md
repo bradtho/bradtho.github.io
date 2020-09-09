@@ -18,7 +18,7 @@ So it's at this point the procrastination sets in... it's taken me nearly 2 year
 ![full](/assets/images/pathways.png)
 {: .full}
 
-There's no real reason to start with *"Learn a Programming Language"* but given I think it will be the most timely of tasks (especially if you have little to no programming experience) then it's a pretty decent start.
+There's no real reason to start with *"Learn a Programming Language"* but given that it will be the most timely of tasks (especially if you have little to no programming experience) then it's a pretty decent start.
 
 One thing I do challenge everyone to try is to *"Live in the Terminal"* for one month - yeah OK I haven't done this myself but I reckon it'll make an awesome blog post when I eventually do!
 

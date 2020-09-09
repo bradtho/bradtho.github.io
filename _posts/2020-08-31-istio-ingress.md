@@ -5,7 +5,8 @@ categories: service-mesh istio
 classes: wide
 ---
 
-> Coming from a low-layer Networking background I've always struggled a bit with Istio. Even something like getting Ingress setup baffled me for the longest time. Really though, it's no harder than configuring ADSL on a CISCO-827 and I did that enough times! Difference was that I never wrote down my experiences with networking here I hope to capture an easy way to get Istio Ingress configured on your dev environment
+> Coming from a low-layer Networking background I've always struggled a bit with Istio. Even something like getting Ingress setup baffled me for the longest time. Really though, it's no harder than configuring ADSL on a CISCO-827 and I did that enough times! Difference was that I never wrote down my experiences with networking here I hope to capture an easy way to get Istio Ingress configured on your dev environment.
+{: .notice--success}
 
 ## Prerequisites
 
@@ -15,7 +16,8 @@ You'll need a Kubernetes cluster to test this. If you're comfortable with gettin
 
 Since the release of v1.6, Istio can now be installed using an Operator.
 
-> Instead of manually installing, upgrading, and uninstalling Istio in a production environment, you can instead let the Istio operator manage the installation for you. This relieves you of the burden of managing different istioctl versions. Simply update the operator custom resource (CR) and the operator controller will apply the corresponding configuration changes for you.
+> *"Instead of manually installing, upgrading, and uninstalling Istio in a production environment, you can instead let the Istio operator manage the installation for you. This relieves you of the burden of managing different istioctl versions. Simply update the operator custom resource (CR) and the operator controller will apply the corresponding configuration changes for you." - someone at Istio.io*
+{: .notice--success}
 
 Sounds pretty good right? Well it did to me so I thought I'd give it a try.
 
@@ -38,7 +40,6 @@ Using operator Deployment image: docker.io/istio/operator:1.7.0
 ✔ Installation complete
 
 {% endhighlight %}
-
 
 Well that was pretty straight forward - except that's just getting the Operator installed
 
@@ -64,7 +65,7 @@ EOF
 
 {% endhighlight %}
 
-Installation was extremely quick and I was able to verify that the installation went in OK but running the following commands
+Installation was extremely quick and I was able to verify that the installation went in OK by running the following commands
 
 {% highlight bash %}
 
@@ -86,7 +87,7 @@ istiod-59747cbfdd-x285g                 1/1     Running   0          3m14s
 
 ## Bonus steps
 
-I was a little underwhelmed with the installation process so I thought I'd up the stakes and change from the **demo** config profile to the **default** profile. Mainly because I wanted to give it a try but also because I don't really need an egress gateway for now.
+I was a little underwhelmed with the installation process so I thought I'd up the stakes and change from the **demo** config profile to the **default** profile. Mainly because I wanted to give it a try but also because I don't really need an egress gateway right now.
 
 {% highlight bash %}
 
@@ -119,17 +120,24 @@ istiod-6f5fd7cb8f-wxhf7                 1/1     Running   0          23s
 
 ## Deploy an Application
 
-Deploying the application to the minikube cluster is a fairly straight forward process. Here I'm using [httpbin](https://httpbin.org/) but any application that exposes a http end-point will do.
+Deploying the application to the minikube cluster is a fairly straight forward process. I'm using [httpbin](https://httpbin.org/) for this demonstration, but any application that exposes a HTTP(s) end-point will do.
 
 {% highlight bash %}
 
-## Create a Namespace, Service and Deployment
-$kubectl apply -f - <<EOF
+## Create a Service Account, Namespace, Service and Deployment
+$ kubectl apply -f - <<EOF
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: httpbin
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: httpbin
+  labels:
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Service
@@ -140,9 +148,9 @@ metadata:
     app: httpbin
 spec:
   ports:
-  - port: 8080
+  - name: http
+    port: 8080
     targetPort: 80
-    protocol: TCP
   selector:
     app: httpbin
 ---
@@ -163,13 +171,13 @@ spec:
       labels:
         app: httpbin
     spec:
+      serviceAccountName: httpbin
       containers:
       - image: kennethreitz/httpbin:latest
         imagePullPolicy: Always
         name: httpbin
         ports:
         - containerPort: 80
-          protocol: TCP
 EOF
 
 ## Check that the httpbin service is online
@@ -180,7 +188,7 @@ httpbin   ClusterIP   10.106.205.23   <none>        8080/TCP   10m
 ## Check that the httpbin pod is online
 $ kubectl get pods -n httpbin
 NAME                       READY   STATUS    RESTARTS   AGE
-httpbin-558f4b785d-4qwxw   1/1     Running   0          8m40s
+httpbin-558f4b785d-q62hc   2/2     Running   0          4m59s
 
 {% endhighlight %}
 
@@ -189,3 +197,75 @@ httpbin-558f4b785d-4qwxw   1/1     Running   0          8m40s
 ... well to your laptop anyways.
 
 Here's the bit that stumped me about Istio Ingress for the longest time. What's all this Virtual Service nonsense anyways? Well rather than read how about a picture of how it works?
+
+![full](/assets/images/istio_ingress.png)
+{: .full}
+
+**Gateway** resources defines our ports, protocols, and virtual hosts that the **Istio IngressGateway** listens on. **VirtualService** resources define where traffic should go after it has hit the *Istio IngressGateway*. **Services** create an abstraction of a set of **Pods** and defines how to access them.
+
+{% highlight bash %}
+## Create Virtual Service and Gateway resources
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin-vs
+  namespace: httpbin
+  labels:
+    app: httpbin
+spec:
+  gateways:
+  - httpbin-gw
+  hosts:
+  - "*"
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gw
+  namespace: httpbin
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+EOF
+
+{% endhighlight %}
+
+> Now the next step assumes you're attempting to access your Minikube cluster locally. I may write up a bonus section on how to access the httpbin service remotely in the future. Maybe I'll bundle it in with a https or mtls piece.
+{: .notice--success}
+
+Final step is to test whether all the configuration done actually works.
+
+{% highlight bash %}
+
+## Get the IP of your Minikube Cluster and the Port that the Istio IngressGateway is listening on
+$ export INGRESS_HOST=$(minikube ip)
+$ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+## Use Curl to access the exposed httpbin service
+$ curl -I "http://$INGRESS_HOST:$INGRESS_PORT/status/200"
+
+HTTP/1.1 200 OK
+server: istio-envoy
+date: Wed, 09 Sep 2020 12:04:56 GMT
+content-type: text/html; charset=utf-8
+access-control-allow-origin: *
+access-control-allow-credentials: true
+content-length: 0
+x-envoy-upstream-service-time: 23
+
+{% endhighlight %}
+
+Thanks for reading!

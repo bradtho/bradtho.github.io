@@ -6,6 +6,7 @@ classes: wide
 ---
 
 > I've been needing a dedicated Kubernetes Dev Environment for the longest time - Minkube is great for this. However, the only piece of kit I have available and that's servicable is an old Dell Optiplex. I really didn't want to introduce another screen to my already busy desk so decided that whatever I was going to use for my Dev Environment had to be capable of being *Remote* (remote being under my desk) and *Headless* (command-line or browser only).
+{: .notice--success}
 
 ## Prerequisites
 
@@ -56,6 +57,7 @@ $ minikube version
 * Finally take a note of the IP Address of the remote server
 
 > I'm assuming that you're SSHing into your headless server and therefore know its IP Address. If not you can run the following command.
+{: .notice--success}
 
 {% highlight bash %}
 
@@ -78,6 +80,7 @@ So there are two key steps to getting this working:
 2. Creating a Port Forwarding rule in your VirtualBox configuration to forward traffic to the kubectl port :8443
 
 > NOTE: This can probably be replicated for 80 and 443 should you want to get the Kubernetes Dashboard running or in fact any other service you'd like to play around with.
+{: .notice--success}
 
 * Start minikube using the Virtualbox driver and setting the API Address to the IP address you took a not of earlier.
 
