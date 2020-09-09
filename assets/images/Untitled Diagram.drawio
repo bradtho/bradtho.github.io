@@ -1,1 +1,43 @@
-<mxfile host="app.diagrams.net" modified="2020-09-09T10:41:56.395Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" version="13.6.6" etag="o9HKCJ2ju22vsdV0rZCH" type="github"><diagram id="H9hJ39cmtpml3c3PtMZU">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-09-09T12:15:52.098Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36" etag="9m8i4iLWtJFlsQ-XQK8i" version="13.6.6" type="github">
+  <diagram id="H9hJ39cmtpml3c3PtMZU" name="Page-1">
+    <mxGraphModel dx="1350" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" extFonts="Gochi Hand^https://fonts.googleapis.com/css?family=Gochi+Hand">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-9" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;sketch=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Gochi Hand;" edge="1" parent="1" source="YfAreLP3aETJ1-6HqEZo-1" target="YfAreLP3aETJ1-6HqEZo-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-1" value="Istio Ingress Gateway" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;fontFamily=Gochi Hand;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="240" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-10" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;sketch=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Gochi Hand;" edge="1" parent="1" source="YfAreLP3aETJ1-6HqEZo-2" target="YfAreLP3aETJ1-6HqEZo-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-2" value="Kubernetes Service" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;fontFamily=Gochi Hand;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="600" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-3" value="Kubernetes Pod" style="rounded=0;whiteSpace=wrap;html=1;sketch=1;fontFamily=Gochi Hand;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="760" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-11" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;sketch=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.9;entryY=-0.025;entryDx=0;entryDy=0;fontFamily=Gochi Hand;entryPerimeter=0;" edge="1" parent="1" source="YfAreLP3aETJ1-6HqEZo-5" target="YfAreLP3aETJ1-6HqEZo-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-5" value="VirtualService" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;sketch=1;fontFamily=Gochi Hand;FType=g;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="560" y="160" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;sketch=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.083;entryY=1.075;entryDx=0;entryDy=0;fontFamily=Gochi Hand;curved=1;entryPerimeter=0;" edge="1" parent="1" source="YfAreLP3aETJ1-6HqEZo-6" target="YfAreLP3aETJ1-6HqEZo-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-6" value="Gateway" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;sketch=1;fontFamily=Gochi Hand;FType=g;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="440" y="320" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-13" style="edgeStyle=entityRelationEdgeStyle;rounded=0;sketch=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Gochi Hand;" edge="1" parent="1" source="YfAreLP3aETJ1-6HqEZo-7" target="YfAreLP3aETJ1-6HqEZo-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="YfAreLP3aETJ1-6HqEZo-7" value="Client Request" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;sketch=1;fontFamily=Gochi Hand;" vertex="1" parent="1">
+          <mxGeometry x="300" y="220" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
