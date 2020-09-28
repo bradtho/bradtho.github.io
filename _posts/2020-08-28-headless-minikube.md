@@ -142,20 +142,20 @@ clusters:
   - cluster:
     certificate-authority: ~/.kube/ca.crt
     server: https://10.10.10.38:43910
-name: minikube
+  name: minikube
 contexts:
   - context:
     cluster: minikube
     user: minikube
-name: minikube
+  name: minikube
 current-context: minikube
 kind: Config
 preferences: {}
 users:
   - name: minikube
-user:
-  client-certificate: ~/.kube/client.crt
-  client-key: ~/.kube/client.key
+  user:
+    client-certificate: ~/.kube/client.crt
+    client-key: ~/.kube/client.key
 
 {% endhighlight %}
 
