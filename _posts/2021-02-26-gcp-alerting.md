@@ -6,7 +6,7 @@ classes: wide
 ---
 
 > I've always found that when getting things working quickly is required that using ClickOps is great. However, when you need to repeat something over and over - as was the case at work recently - nothing beats Infrastructure as Code. In this post I'm going to demonstrate how to setup Slack and Email alerting for Google Cloud Platform CloudOps (formerly Stackdriver) using Terraform.
-{: notice--success}
+{: .notice--success}
 
 ## Create a Slack App Bot
 
