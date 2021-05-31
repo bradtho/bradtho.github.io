@@ -26,7 +26,7 @@ So why am I throwing my lot back in with Azure after having spent the last two-a
 - With their acquisition of GitHub (yes, Azure DevOps has been around for a while) I could see that Microsoft were going to continue heading in the right direction of enabling DevOps culture. I love using [GitHub Actions](https://github.com/features/actions)
 - Finally, after having had used both AWS and Google Cloud platforms in recent years I felt that Azure provides a far better user experience - at least for me.
 
-*Yup controversial I know, but I honestly can't remember the last time I've actually needed to install an operating system. I'll probably have to do an IaaS lift and shift now :facepalm:
+*Yup controversial I know, but I honestly can't remember the last time I've actually needed to install an operating system. I'll probably have to do an IaaS lift and shift now :sob:
 
 ## So What Now
 

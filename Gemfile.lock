@@ -264,6 +264,7 @@ DEPENDENCIES
   github-pages
   jekyll-feed (~> 0.12)
   jekyll-include-cache
+  jemoji
 
 BUNDLED WITH
    2.1.4
