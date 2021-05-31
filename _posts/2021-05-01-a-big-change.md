@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "A Big Change"
-categories: azure microsoft career
+categories: career
 classes: wide
 ---
 
