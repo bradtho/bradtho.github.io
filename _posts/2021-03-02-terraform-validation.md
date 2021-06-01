@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Validation of Terraform Custom Variables using Regex"
-categories: infrastructure-provisioning terraform
+categories: posts
 classes: wide
 ---
 

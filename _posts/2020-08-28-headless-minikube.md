@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Building a Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server"
-categories: container-orchestration kubernetes
+categories: posts
 classes: wide
 ---
 
@@ -14,18 +14,21 @@ So firstly, I had to get some pre-requisites installed. Some were already instal
 
 I'm also running Ubuntu so these steps will be specific to that OS - I'll provide links to the vendor pages as I go in case you're running a different OS. The differences are fairly minimal.
 
-* [Install kubectl](https:##kubernetes.io/docs/tasks/tools/install-kubectl/) - you'll need to do this on your management device and the server that's going to be running your Minkube instance.
+* [Install kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - you'll need to do this on your management device and the server that's going to be running your Minkube instance.
 
 {% highlight bash %}
 
 ## Download the latest kubectl binary and make it executable
+
 $ curl -LO "https:##storage.googleapis.com/kubernetes-release/release/$(curl -s https:##storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" \ 
     && chmod +x ./kubectl
 
 ## Move the binary to somewhere in your $PATH
+
 $ sudo mv kubectl /usr/local/bin/kubectl
 
-## Make sure it installed correctly
+## Make sure kubectl installed correctly
+
 $ kubectl version
 
 {% endhighlight %}
@@ -35,21 +38,25 @@ $ kubectl version
 {% highlight bash %}
 
 ## Download and Install Virtualbox
+
 $ sudo apt install virtualbox virtualbox-ext-pack
 
 {% endhighlight %}
 
-* [Install Minikube](https:##kubernetes.io/docs/tasks/tools/install-minikube/)
+* [Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 {% highlight bash %}
 
 ## Download the minikube binary any make it executable
+
 $ curl -Lo minikube https:##storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 
 
-## Move the binary to somewhere in your $PATH
+## Move binary to somewhere in your $PATH
+
 $ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-## Make sure it installed correctly
+## Make sure minikube installed correctly
+
 $ minikube version
 
 {% endhighlight %}
@@ -62,9 +69,11 @@ $ minikube version
 {% highlight bash %}
 
 ## Get the network hardware configuration information
+
 $ ip a
 
 ## If you know the hardware address of your adapter you can pipe and grep
+
 $ ip a | grep eno1
 2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000 inet 10.10.10.38/24 brd 10.10.10.255 scope global dynamic eno1
 
@@ -87,10 +96,12 @@ So there are two key steps to getting this working:
 {% highlight bash %}
 
 ## Make VirtualBox the default driver
+
 $ minikube config set driver virtualbox
 ❗  These changes will take effect upon a minikube delete and then a minikube start
 
 ## Start minikube with the apiserver-ips=<your host ip>
+
 $ minikube start --apiserver-ips=10.10.10.38
 😄  minikube v1.12.3 on Ubuntu 20.04
 ✨  Using the virtualbox driver based on user configuration
@@ -108,6 +119,7 @@ $ minikube start --apiserver-ips=10.10.10.38
 {% highlight bash %}
 
 ## Run these from your local machine
+
 $ scp user@server:~/.minikube/profiles/minikube/client.key ~/.kube/client.key
 $ scp user@server:~/.minikube/profiles/minikube/client.crt ~/.kube/client.crt
 $ scp user@server:~/.minikube/ca.crt ~/.kube/ca.crt
@@ -119,16 +131,20 @@ $ scp user@server:~/.minikube/ca.crt ~/.kube/ca.crt
 {% highlight zsh %}
 
 ## Get the minikube VM's network information
+
 $ VBoxManage showvminfo minikube | grep 'NIC 1 Rule(0)'
 NIC 1 Rule(0):   name = ssh, protocol = tcp, host ip = 127.0.0.1, host port = 36235, guest ip = , guest port = 22
 
 ## Check that the port you're about to set isn't in use - I'm going to use 43910
+
 $ sudo lsof -i -P -n
 
 ## Assuming the minikube vm is running set up the port forwarding rule with this command
+
 $ VBoxManage controlvm minikube natpf1 "kubectl,tcp,,43910,,8443"
 
 ## If you minikube vm is not running you can run this command
+
 $ VBoxManage modifyvm minikube natpf1 "kubectl,tcp,,43910,,8443"
 
 {% endhighlight %}

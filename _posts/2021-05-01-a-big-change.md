@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "A Big Change"
-categories: career
+categories: posts
 classes: wide
 ---
 
