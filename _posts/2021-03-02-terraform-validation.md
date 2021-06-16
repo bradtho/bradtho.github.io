@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Validation of Terraform Custom Variables using Regex"
-categories: posts
+categories: technology
 classes: wide
 ---
 
@@ -52,12 +52,16 @@ variable "labels_and_metadata" {
       labels   = {}
       metadata = {}
     }
-  ## This first validation only checks that the variable contains a particular value e.g. big-value1 would be a valid variable
+
+## This first validation only checks that the variable contains a particular value e.g. big-value1 would be a valid variable
+  
   validation {
     condition     = can([for v in var.labels_and_metadata : contains(["value1", "value1"], v.metadata.key)])
     error_message = "The key must contain either \"value1\" or \"value2\"."
   }
-  ## This second validation is more strict ensuring that the variable exactly matches either low, medium or high. If we were to use the contains function then "blow" or "I like to get high" would both be valid variables.
+
+## This second validation is more strict ensuring that the variable exactly matches either low, medium or high. If we were to use the contains function then "blow" or "I like to get high" would both be valid variables
+
   validation {
     condition     = can([for v in var.labels_and_metadata : regex("\\blow\\b|\\bmedium\\b|\\bhigh\\b", v.labels.speed)])
     error_message = "Speed must be either 'low', 'medium' or 'high'."

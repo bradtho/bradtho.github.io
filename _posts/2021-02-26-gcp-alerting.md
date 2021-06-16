@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Getting alerts from Google CloudOps using Terraform"
-categories: posts
+categories: technology
 classes: wide
 ---
 

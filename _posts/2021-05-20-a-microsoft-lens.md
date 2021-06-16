@@ -1,11 +1,11 @@
 ---
 layout: single
 title: "A Microsoft Lens"
-categories: posts
+categories: career
 classes: wide
 ---
 
-> When I initially started this blog the entire premise was for it to be based around my journey working my way through a [personalised](/about/) version of [this](https://roadmap.sh/devops) awesome flowchart. Well as you may know, I [recently changed roles](/posts/a-big-change/) so my journey has changed somewhat.
+> When I initially started this blog the entire premise was for it to be based around my journey working my way through a [personalised](/about/) version of [this](https://roadmap.sh/devops) awesome flowchart. Well as you may know, I [recently changed roles](/career/a-big-change/) so my journey has changed somewhat.
 {: .notice--success}
 
 ## The Original Journey
@@ -19,7 +19,7 @@ I'm certainly not going to toss my original personalisation away* as I believe i
 
 ## The New (Azure) Journey
 
-So I have definitely **not** sold my soul (well not entirely) to Microsoft with this change - I didn't have one to sell but that's a different story :smiling_imp: - but as I explained in my ["A Big Change"](/posts/a-big-change) post I'll be focusing primarily on Azure Platform Services for the foreseeable future. It didn't make a huge amount of sense to me to keep writing topics about technology that I won't actually implementing.
+So I have definitely **not** sold my soul (well not entirely) to Microsoft with this change - I didn't have one to sell but that's a different story :smiling_imp: - but as I explained in my ["A Big Change"](/career/a-big-change) post I'll be focusing primarily on Azure Platform Services for the foreseeable future. It didn't make a huge amount of sense to me to keep writing topics about technology that I won't actually implementing.
 
 You'll definitely continue to see some content on Open Source projects, heck even a number of the Microsoft tech is Open Source!. However, the bulk of my writings will be about Platform Engineering in the Azure eco-system. The blog will continue to be about being Cloud Native how to move away from the "old-world", so I will not be writing about the Windows Operating System and you'll definitely be seeing a lot of Linux Shell, Infrastructure as Code and Code Snippets.
 

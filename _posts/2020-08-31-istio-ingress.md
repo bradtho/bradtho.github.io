@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Working with Istio Ingress"
-categories: posts
+categories: technology
 classes: wide
 ---
 
@@ -10,7 +10,7 @@ classes: wide
 
 ## Prerequisites
 
-You'll need a Kubernetes cluster to test this. If you're comfortable with getting that setup you can use minikube or similar. Otherwise, I have a [how-to guide](/posts/headless-minikube/) on how to set up minikube on a dedicated development machine.
+You'll need a Kubernetes cluster to test this. If you're comfortable with getting that setup you can use minikube or similar. Otherwise, I have a [how-to guide](/technology/headless-minikube/) on how to set up minikube on a dedicated development machine.
 
 ## Installing the Istio Operator
 
