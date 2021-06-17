@@ -6,7 +6,7 @@ tags: azure security github
 classes: wide
 ---
 
-> One of the more personally interesting demonstrations at Microsoft Build this year was the **Scaling DevSecOps with GitHub and Azure** the tech was still in preview at the time of the presentation. The demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my version will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
+> One of the more personally interesting demonstrations at Microsoft Build this year was the **Scaling DevSecOps with GitHub and Azure** talk. The tech was still in preview at the time of the presentation. The demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my version will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
 {: .notice--success}
 > UPDATE: So, I tried to obtain the **Authentication Token** and **Connection String** you'll see below via the CLI however it doesn't look like they've made changes to the API so neither az cli or PowerShell worked :sob:
 {: .notice--danger}
