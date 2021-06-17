@@ -6,7 +6,7 @@ tags: azure security github
 classes: wide
 ---
 
-> One of the more personally interesting demonstrations at Microsoft Build this year was the **Kickstart collaborative DevSecOps practices with GitHub and Azure** the tech was still in preview at the time of the presentation but thankfully not when I wrote this post. The demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my version will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
+> One of the more personally interesting demonstrations at Microsoft Build this year was the **Scaling DevSecOps with GitHub and Azure** the tech was still in preview at the time of the presentation. The demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my version will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
 {: .notice--success}
 > UPDATE: So, I tried to obtain the **Authentication Token** and **Connection String** you'll see below via the CLI however it doesn't look like they've made changes to the API so neither az cli or PowerShell worked :sob:
 {: .notice--danger}
@@ -15,11 +15,11 @@ classes: wide
 
 ## Prerequisites
 
-Obviously please do go checkout the original post available [here](https://techcommunity.microsoft.com/t5/azure-developer-community-blog/kickstart-collaborative-devsecops-practices-with-github-and/ba-p/2357730) especially if my CLI steps aren't making much sense.
+Obviously please do go checkout the original blog post available [here](https://techcommunity.microsoft.com/t5/azure-developer-community-blog/kickstart-collaborative-devsecops-practices-with-github-and/ba-p/2357730) especially if my CLI steps aren't making much sense.
 
 I'm going to assume you already have an Azure Subscription to use - [free account](https://azure.microsoft.com/en-gb/free/). This will give you Azure Security Center from which we'll be switching on the Azure Defender.
 
-> If you don't have an Azure Container Registry (ACR) [here's a post](/technology/enable-azure-container-registry.md) on how to do that and get it setup with GitHub Actions to push container images up to a private registry.
+> If you don't have an Azure Container Registry (ACR) [here's a post](/technology/enable-azure-container-registry.md) on how to do that and get it setup with GitHub Actions to push container images up to a container registry.
 {: .notice--success}
 
 I'm also going to write ~~all~~ ~~most~~ as many as I can of the commands using **azure CLI** and **github CLI**. I may one day write a port for **Powershell** but I'm sure if you're using Powershell you'll already know what to do :wink:
@@ -101,6 +101,11 @@ Here we can see them present in GitHub web console under **Settings > Secrets**
 
 We're getting closer to the good stuff now. Here I'll be updating an existing GitHub Actions workflow which pushes **myapplication** into Azure Container Registry. If you don't already have ACR up and running you can check out this [blog post](/technology/enable-azure-container-registry/).
 
+We need to add in two additional steps
+
+- Scan image for vulnernabilities
+- Post scan results to ASC
+
 {% highlight yaml %}
 
 name: demo
@@ -115,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code into the Go module directory
+    - name: Checkout code
       uses: actions/checkout@main
 
     - name: Login to Azure Container Registry
@@ -128,21 +133,122 @@ jobs:
     - name: Build the Docker image
       run: docker build . -t ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
 
-    - name: Scan image for vulnerabilities
-      uses: Azure/container-scan@v0 
-      id: container-scan
+    - name: Scan local image for vulnerabilities
+      uses: Azure/container-scan@v0.1
+      id: container_scan
       continue-on-error: true
       with:
         image-name: ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
 
-    - name: Push Image to Docker
+    - name: Push Image to ACR
       run: docker push ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
 
-    - name: Post logs to appinsights
+    - name: Post Logs to ASC
       uses: Azure/publish-security-assessments@v0
       with: 
-        scan-results-path: ${ steps.container-scan.outputs.scan-report-path }
+        artifact-type: containerImage 
+        scan-results-path: ${ steps.container_scan.outputs.scan-report-path }
         connection-string: ${ secrets.AZ_APPINSIGHTS_CONNECTION_STRING }
         subscription-token: ${ secrets.AZ_SUBSCRIPTION_TOKEN }
 
 {% endhighlight %}
+
+## Viewing the results in GitHub
+
+I deliberately made some tweaks to my Dockerfile to force it to get some vulnerabilities as we can see in the following screenshots.
+
+In your repo navigate to **Actions > Your Action** otherwise you can also use the ``github cli``
+
+{% highlight bash %}
+
+$ gh workflow view --repo bradtho/myapplication
+? Select a workflow demo (push.yml)
+demo - push.yml
+ID: 10484951
+
+Total runs 8
+Recent runs
+✓  demo                                                demo  master  push  944934764
+X  demo                                                demo  master  push  944913273
+X  fixing CI error                                     demo  master  push  944898002
+X  removing the distroless step and amending workflow  demo  master  push  944893062
+✓  updating push workflow for container scanning       demo  master  push  944690742
+
+To see more runs for this workflow, try: gh run list --workflow push.yml
+To see the YAML for this workflow, try: gh workflow view push.yml --yaml
+
+$ gh run view 944934764 --repo bradtho/myapplication
+
+✓ master demo · 944934764
+Triggered via push about 1 hour ago
+
+JOBS
+✓ demo in 1m19s (ID 2845203828)
+
+ANNOTATIONS
+X Vulnerabilities were detected in the container image
+demo: .github#1
+
+{% endhighlight %}
+
+![image-center](/assets/images/asc_workflow.png){: .align-center}
+
+The workflow found some vulnerabilities so let's drill into the job to see the events
+
+{% highlight bash %}
+
+$ gh run view 944934764 --log --repo bradtho/myapplication
+
+## I'm not going to give you the full log but this one entry is probably worthwhile recording
+
+demo    Post scan results to ASC        2021-06-17T03:03:38.7972762Z Posting scan results to Azure AppInsights. Request Id: 6071c717-eb94-4c37-b668-33cd71ccf1d6
+
+{% endhighlight %}
+
+![image-center](/assets/images/asc_vulnerabilities.png){: .align-center}
+
+OK it found a lot of vulnerabilties and this report has been sent to Azure Security Center
+
+![image-center](/assets/images/asc_report.png){: .align-center}
+
+## Viewing the results in Azure Security Center
+
+I suppose this is where things fall down. We've successfully identified Vulnerabilites in our GitHub Actions workflow however as you'll see they're just not showing up in Azure Security Center.
+
+From the Azure Security Center navigate to the Recommendations page and select the ``Vulnerabilities in Azure Container Registry images should be remediated (powered by Qualys)`` option.
+
+![image-center](/assets/images/asc_recommendations.png){: .align-center}
+
+![image-center](/assets/images/asc_policy.png){: .align-center}
+
+No Vulnerabilities? OK let's drill into this some more - select **Affected Resources** and click the **Healthy Registries** tab > your registry > your repository > take a note of the Image Tag
+
+![image-center](/assets/images/asc_healthy_1.png){: .align-center}
+
+![image-center](/assets/images/asc_healthy_2.png){: .align-center}
+
+![image-center](/assets/images/asc_healthy_3.png){: .align-center}
+
+So I'm not too sure what's going on here. Is there a difference in policy? Is there a false positive coming from GitHub with the logs being shipped successfully?
+
+## Troubleshooting
+
+Let's see what Azure is considering as a scanned image.
+
+First test we'll put a break in the workflow to not report the findings.
+
+✓ ``Not Scanned``
+
+Second test we'll then remove the break and observe the results.
+
+✓ ``Found``
+
+We can see that the reports are correctly being sent to Azure but Azure Security Center isn't considering the image vulnerable - even though there are CVE's being reported in the GitHub Actions output.
+
+![image-center](/assets/images/asc_troubleshoot_1.png){: .align-center}
+
+I decided to rewatch the [Scaling DevSecOps with GitHub and Azure](https://mybuild.microsoft.com/sessions/87cc3b82-bc57-483d-90b3-e91e12516352?source=sessions) session that's available on demand to see if I'd missed anything - nothing missed. The only thing I could think of was to try using the Tailwind Traders Website repo instead of my own (at least to provide some level of comparison)
+
+## Conclusion
+
+I definitely feel that there is a long way to go with this Azure Security Center integration (yes, it's in Preview so hopefully it does get some attention). Reporting false positives in a security aspect is definitely not an ideal. I'd like to think that what's [documented](https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-cicd) as working actually works as expected.
