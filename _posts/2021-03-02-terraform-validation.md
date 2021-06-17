@@ -2,6 +2,7 @@
 layout: single
 title: "Validation of Terraform Custom Variables using Regex"
 categories: technology
+tags: terraform
 classes: wide
 ---
 

@@ -2,6 +2,7 @@
 layout: single
 title: "Building a Kubernetes Dev Environment on a Headless Ubuntu 20.04 Server"
 categories: technology
+tags: kubernetes
 classes: wide
 ---
 

@@ -2,6 +2,7 @@
 layout: single
 title: "Working with Istio Ingress"
 categories: technology
+tags: kubernetes service-mesh
 classes: wide
 ---
 

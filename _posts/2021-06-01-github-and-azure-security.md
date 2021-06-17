@@ -99,4 +99,50 @@ Here we can see them present in GitHub web console under **Settings > Secrets**
 
 ## Consuming Secrets using GitHub Actions
 
-We're getting closer to the good stuff now. Here I'll be updating an existing GitHub Actions workflow which pushes **myapplication** into Azure Container Registry.
+We're getting closer to the good stuff now. Here I'll be updating an existing GitHub Actions workflow which pushes **myapplication** into Azure Container Registry. If you don't already have ACR up and running you can check out this [blog post](/technology/enable-azure-container-registry/).
+
+{% highlight yaml %}
+
+name: demo
+on: push
+
+env:
+  REGISTRY_NAME: bradlab
+  APP_NAME: myapplication
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@main
+
+    - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${ env.REGISTRY_NAME }.azurecr.io
+        username: ${ secrets.AZ_SP_CLIENT_ID }
+        password: ${ secrets.AZ_SP_CLIENT_SECRET }
+
+    - name: Build the Docker image
+      run: docker build . -t ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
+
+    - name: Scan image for vulnerabilities
+      uses: Azure/container-scan@v0 
+      id: container-scan
+      continue-on-error: true
+      with:
+        image-name: ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
+
+    - name: Push Image to Docker
+      run: docker push ${ env.REGISTRY_NAME }.azurecr.io/${ env.APP_NAME }:${ github.sha }
+
+    - name: Post logs to appinsights
+      uses: Azure/publish-security-assessments@v0
+      with: 
+        scan-results-path: ${ steps.container-scan.outputs.scan-report-path }
+        connection-string: ${ secrets.AZ_APPINSIGHTS_CONNECTION_STRING }
+        subscription-token: ${ secrets.AZ_SUBSCRIPTION_TOKEN }
+
+{% endhighlight %}

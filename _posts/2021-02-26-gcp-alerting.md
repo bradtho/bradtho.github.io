@@ -2,6 +2,7 @@
 layout: single
 title: "Getting alerts from Google CloudOps using Terraform"
 categories: technology
+tags: monitoring alerting gcp
 classes: wide
 ---
 

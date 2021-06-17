@@ -5,9 +5,8 @@ permalink: /about/
 classes: wide
 ---
 
->UPDATE: See [this blog post](/posts/a-microsoft-lens/) if you'd like to read about my latest Journey and why it's taking me in a different direction and what it means for this blog.
+>UPDATE: See [this blog post](/career/a-microsoft-lens/) if you'd like to read about my latest Journey and why it's taking me in a different direction and what it means for this blog.
 {: .notice--warning}
-
 >I've been actively procrastinating about writing a blog for the longest time. The need to start keeping all my technical notes somewhere that wasn't a piece of paper has become increasingly important. This blog is intended to be a many part saga with multiple pathways. Don't expect them all to be applicable to you, pick and choose the roads that make your journey most relative to your particular circumstances.
 {: .notice--success}
 
