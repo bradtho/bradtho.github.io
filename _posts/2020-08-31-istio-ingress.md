@@ -213,12 +213,12 @@ httpbin-558f4b785d-q62hc   2/2     Running   0          4m59s
 
 Here's the bit that stumped me about Istio Ingress for the longest time. What's all this Virtual Service nonsense anyways? Well rather than read how about a picture of how it works?
 
-![full](/assets/images/istio_ingress.png)
-{: .full}
+[![full](/assets/images/istio_ingress.png)](/assets/images/istio_ingress.png){: .full}
 
 **Gateway** resources defines our ports, protocols, and virtual hosts that the **Istio IngressGateway** listens on. **VirtualService** resources define where traffic should go after it has hit the *Istio IngressGateway*. **Services** create an abstraction of a set of **Pods** and defines how to access them.
 
 {% highlight bash %}
+
 ## Create Virtual Service and Gateway resources
 
 kubectl apply -f - <<EOF
@@ -271,6 +271,7 @@ Final step is to test whether all the configuration done actually works.
 
 $ export INGRESS_HOST=$(minikube ip)
 $ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+
 ## Use Curl to access the exposed httpbin service
 
 $ curl -I "http://$INGRESS_HOST:$INGRESS_PORT/status/200"

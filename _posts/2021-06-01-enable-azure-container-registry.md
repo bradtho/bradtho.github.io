@@ -168,7 +168,7 @@ $ gh secret set AZ_SP_CLIENT_SECRET --repo bradtho/myapplication
 
 Here we can see them present in GitHub web console under **Settings > Secrets**
 
-![image-center](/assets/images/acr_secrets.png){: .align-center}
+[![image-center](/assets/images/acr_secrets.png)](/assets/images/acr_secrets.png){: .align-center}
 
 ## Setup a GitHub Actions Pipeline
 
@@ -213,9 +213,9 @@ jobs:
 
 We can see that this Workflow has passed and the Docker Image is now in ACR. Unfortunately I didn't tag these properly so one is the short hash and the other is the full hash but you'll see that they're the same image.
 
-![image-center](/assets/images/acr_workflow.png){: .align-center}
+[![image-center](/assets/images/acr_workflow.png)](/assets/images/acr_workflow.png){: .align-center}
 
-![image-center](/assets/images/acr_images.png){: .align-center}
+[![image-center](/assets/images/acr_images.png)](/assets/images/acr_images.png){: .align-center}
 
 Alternatively you can use the ``gh cli`` and ``az cli`` to perform these validations.
 

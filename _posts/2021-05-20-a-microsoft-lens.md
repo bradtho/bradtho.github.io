@@ -12,8 +12,7 @@ classes: wide
 
 I'm certainly not going to toss my original personalisation away* as I believe it's still relevant for those who've come from traditional Systems Admin roles and are pursuing a less nuanced approach to DevOps. Here you can see some pretty vendor neutral technology - in fact other than GitHub Actions there's actually no Microsoft tooling in the diagram! I definitely encourage those making the shift away from traditional ClickOps to take up this pathway of Microsoft is not their cup of tea.
 
-![full](/assets/images/pathways.png)
-{: .full}
+[![full](/assets/images/pathways.png)](/assets/images/pathways.png){: .full}
 
 *Well actually being a the total numpty that I am I lost the .drawio file and now I have even less of an excuse to re-write it.
 
@@ -25,8 +24,8 @@ You'll definitely continue to see some content on Open Source projects, heck eve
 
 >I will not be writing about the Windows Operating System.
 
-![full](/assets/images/azure_pathways.png)
-{: .full}
+[![full](/assets/images/azure_pathways.png)](/assets/images/azure_pathways.png){: .full}
+
 
 Aside from being easier to read :trollface: there's really only one major addition I'd like to discuss in the New Journey and that's in the "things-to-learn" category. I realised I'd missed a major learning step from the original - **security**. If you've not been living under a rock you'll know that Security skills are in huge demand so it would be remiss of me ot leave it out of a learning and development pathway. Generally speaking though, security is just a good thing to do everywhere and keep in front of mind and to that end I did throw in the **DevSecOps** pathway. Although, in my opinion, if you're doing security right there should be no need to differentiate it as a standalone concept.
 

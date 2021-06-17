@@ -15,13 +15,11 @@ Instructions on how to create a Slack App Bot are available [here](https://slack
 
 Here's an example of **the API Key** we will need to copy.
 
-![full](/assets/images/bot_api_key.png)
-{: .full}
+[![full](/assets/images/bot_api_key.png)](/assets/images/bot_api_key.png){: .full}
 
 Next we need to set the right permissions for our Alerting Bot
 
-![full](/assets/images/bot_permissions.png)
-{: .full}
+[![full](/assets/images/bot_permissions.png)](/assets/images/bot_permissions.png){: .full}
 
 ## Setup Variables
 

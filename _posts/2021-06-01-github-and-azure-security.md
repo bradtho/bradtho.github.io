@@ -49,7 +49,7 @@ $ az security pricing create --name ContainerRegistry --tier standard
 
 ## Obtain Connection Strings
 
-![image-right](/assets/images/asc_settings.png){: .align-right}
+[![image-right](/assets/images/asc_settings.png)](/assets/images/asc_settings.png){: .align-right}
 
 Once you've switched on Azure Defender for Container Registries navigate into the **Azure Portal > Security Center > Settings > Integrations**
 
@@ -63,9 +63,9 @@ https://portal.azure.com/#blade/Microsoft_Azure_Security/PolicyMenuBlade/threatD
 
 Once on the integrations page you'll want to click the **Configure CI/CD integration** button.
 
-![image-center](/assets/images/asc_integrations.png){: .align-center}
+[![image-center](/assets/images/asc_integrations.png)](/assets/images/asc_integrations.png){: .align-center}
 
-![image-left](/assets/images/asc_cicd.png){: .align-left} As of now there's only two regions where you can set your default workspace. Choosing one or the other will update your **Connection String**. The **Authentication Token** is generated for you based upon your **subscriptionId**.
+[![image-left](/assets/images/asc_cicd.png)](/assets/images/asc_cicd.png){: .align-left} As of now there's only two regions where you can set your default workspace. Choosing one or the other will update your **Connection String**. The **Authentication Token** is generated for you based upon your **subscriptionId**.
 
 You'll need to copy both the **Connection String** and the **Authentication Token** as we'll be saving them as [Encrypted Secrets in GitHub](https://docs.github.com/en/actions/reference/encrypted-secrets)
 
@@ -95,7 +95,7 @@ $ gh secret set AZ_APPINSIGHTS_CONNECTION_STRING --repo bradtho/myapplication
 
 Here we can see them present in GitHub web console under **Settings > Secrets**
 
-![image-center](/assets/images/asc_secrets.png){: .align-center}
+[![image-center](/assets/images/asc_secrets.png)](/assets/images/asc_secrets.png){: .align-center}
 
 ## Consuming Secrets using GitHub Actions
 
@@ -191,7 +191,7 @@ demo: .github#1
 
 {% endhighlight %}
 
-![image-center](/assets/images/asc_workflow.png){: .align-center}
+[![image-center](/assets/images/asc_workflow.png)](/assets/images/asc_workflow.png){: .align-center}
 
 The workflow found some vulnerabilities so let's drill into the job to see the events
 
@@ -205,11 +205,11 @@ demo    Post scan results to ASC        2021-06-17T03:03:38.7972762Z Posting sca
 
 {% endhighlight %}
 
-![image-center](/assets/images/asc_vulnerabilities.png){: .align-center}
+[![image-center](/assets/images/asc_vulnerabilities.png)](/assets/images/asc_vulnerabilities.png){: .align-center}
 
 OK it found a lot of vulnerabilties and this report has been sent to Azure Security Center
 
-![image-center](/assets/images/asc_report.png){: .align-center}
+[![image-center](/assets/images/asc_report.png)](/assets/images/asc_report.png){: .align-center}
 
 ## Viewing the results in Azure Security Center
 
@@ -217,17 +217,17 @@ I suppose this is where things fall down. We've successfully identified Vulnerab
 
 From the Azure Security Center navigate to the Recommendations page and select the ``Vulnerabilities in Azure Container Registry images should be remediated (powered by Qualys)`` option.
 
-![image-center](/assets/images/asc_recommendations.png){: .align-center}
+[![image-center](/assets/images/asc_recommendations.png)](/assets/images/asc_recommendations.png){: .align-center}
 
-![image-center](/assets/images/asc_policy.png){: .align-center}
+[![image-center](/assets/images/asc_policy.png)](/assets/images/asc_policy.png){: .align-center}
 
 No Vulnerabilities? OK let's drill into this some more - select **Affected Resources** and click the **Healthy Registries** tab > your registry > your repository > take a note of the Image Tag
 
-![image-center](/assets/images/asc_healthy_1.png){: .align-center}
+[![image-center](/assets/images/asc_healthy_1.png)](/assets/images/asc_healthy_1.png){: .align-center}
 
-![image-center](/assets/images/asc_healthy_2.png){: .align-center}
+[![image-center](/assets/images/asc_healthy_2.png)](/assets/images/asc_healthy_2.png){: .align-center}
 
-![image-center](/assets/images/asc_healthy_3.png){: .align-center}
+[![image-center](/assets/images/asc_healthy_3.png)](/assets/images/asc_healthy_3.png){: .align-center}
 
 So I'm not too sure what's going on here. Is there a difference in policy? Is there a false positive coming from GitHub with the logs being shipped successfully?
 
@@ -245,10 +245,32 @@ Second test we'll then remove the break and observe the results.
 
 We can see that the reports are correctly being sent to Azure but Azure Security Center isn't considering the image vulnerable - even though there are CVE's being reported in the GitHub Actions output.
 
-![image-center](/assets/images/asc_troubleshoot_1.png){: .align-center}
+[![image-center](/assets/images/asc_troubleshoot_1.png)](/assets/images/asc_troubleshoot_1.png){: .align-center}
 
 I decided to rewatch the [Scaling DevSecOps with GitHub and Azure](https://mybuild.microsoft.com/sessions/87cc3b82-bc57-483d-90b3-e91e12516352?source=sessions) session that's available on demand to see if I'd missed anything - nothing missed. The only thing I could think of was to try using the Tailwind Traders Website repo instead of my own (at least to provide some level of comparison)
 
+### The Results
+
+Lo and behold there's a completely different set of results for this image than with my own.
+
+We get a bunch of vulnerabilities as we did in my own application image.
+
+[![image-center](/assets/images/asc_troubleshoot_2.png)](/assets/images/asc_troubleshoot_2.png){: .align-center}
+
+However, this is what I was expecting to see when I uploaded my image with vulnerabilities to my registry.
+
+[![image-center](/assets/images/asc_troubleshoot_3.png)](/assets/images/asc_troubleshoot_3.png){: .align-center}
+
+We can now drill into the repo to view the details of the vulnerability
+
+[![image-center](/assets/images/asc_troubleshoot_4.png)](/assets/images/asc_troubleshoot_4.png){: .align-center}
+
+and further drill into the image itself to see the findings.
+
+[![image-center](/assets/images/asc_troubleshoot_5.png)](/assets/images/asc_troubleshoot_5.png){: .align-center}
+
 ## Conclusion
 
-I definitely feel that there is a long way to go with this Azure Security Center integration (yes, it's in Preview so hopefully it does get some attention). Reporting false positives in a security aspect is definitely not an ideal. I'd like to think that what's [documented](https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-cicd) as working actually works as expected.
+I definitely feel that there is a long way to go with this Azure Security Center integration (yes, it's in Preview so hopefully it does get some attention). Reporting false negatives within a security aspect is definitely not an ideal scenario. It definitely diminishes the trust you can have in your monitoring tools when they don't report as expected. I'd like to think that what's [documented](https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-cicd) as working actually works as expected all the time.
+
+I think for now I'll rely on the reporting provided by GitHub Actions.
