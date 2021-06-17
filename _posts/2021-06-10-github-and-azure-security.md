@@ -6,27 +6,27 @@ tags: azure security github
 classes: wide
 ---
 
-> One of the more personally interesting demonstrations at Microsoft Build this year was the **Scaling DevSecOps with GitHub and Azure** talk. The tech was still in preview at the time of the presentation. The demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my version will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
+> One of the more personally interesting demonstrations at Microsoft Build this year was the **Scaling DevSecOps with GitHub and Azure** talk. The tech was still in preview at the time of the presentation (and still is). I found the demonstration at Build was very ClickOps oriented so here I'll endeavour to ensure that my examples will be using the terminal and/or config-as-code. I also felt that - due to time constraints - that a lot of the pre-requisite work was glossed over during the presentation so I'll attempt to include as much as is sensible in this post.
 {: .notice--success}
-> UPDATE: So, I tried to obtain the **Authentication Token** and **Connection String** you'll see below via the CLI however it doesn't look like they've made changes to the API so neither az cli or PowerShell worked :sob:
+> UPDATE: I tried to obtain the **Authentication Token** and **Connection String** via the CLI however it doesn't look like they've made changes to the API so neither az cli or PowerShell worked :sob:
 {: .notice--danger}
-> I'm a real fan of GitHub Actions, after having had worked on Jenkins, Harness and Bamboo I've got to say it's my favourite CI/CD tool to-date. The simplicity it offers in terms of just getting stuff done is amazing and now with some of the new security features being introduced I hope that more organisations will take it up as their tool of choice too.
+> On another note, I'm a real fan of GitHub Actions, after having had worked on Jenkins, Harness and Bamboo I've got to say it's my favourite CI/CD tool to-date. The simplicity it offers in terms of just getting stuff done is amazing and now with some of the new security features being introduced I hope that more organisations will take it up as their tool of choice too.
 {: .notice--success}
 
 ## Prerequisites
 
 Obviously please do go checkout the original blog post available [here](https://techcommunity.microsoft.com/t5/azure-developer-community-blog/kickstart-collaborative-devsecops-practices-with-github-and/ba-p/2357730) especially if my CLI steps aren't making much sense.
 
-I'm going to assume you already have an Azure Subscription to use - [free account](https://azure.microsoft.com/en-gb/free/). This will give you Azure Security Center from which we'll be switching on the Azure Defender.
+I'm going to assume you already have an Azure Subscription to use - otherwise you can setup a [free account](https://azure.microsoft.com/en-gb/free/). This will give you Azure Security Center from which we'll be switching on the Azure Defender.
 
-> If you don't have an Azure Container Registry (ACR) [here's a post](/technology/enable-azure-container-registry.md) on how to do that and get it setup with GitHub Actions to push container images up to a container registry.
-{: .notice--success}
+> If you don't already have an Azure Container Registry (ACR) setup [here's a post](/technology/enable-azure-container-registry.md) on how to do that and get it setup with GitHub Actions to push container images up to the registry.
+{: .notice--warning}
 
-I'm also going to write ~~all~~ ~~most~~ as many as I can of the commands using **azure CLI** and **github CLI**. I may one day write a port for **Powershell** but I'm sure if you're using Powershell you'll already know what to do :wink:
+I'm also going to write ~~all~~ ~~most~~ as many as I can of the commands using ``azure CLI`` and ``github CLI``. I may one day write a port for ``Powershell`` but I'm sure if you're using Powershell you'll already know what to do :wink:
 
-You'll need to switch on Azure Defender to get access to some of the settings - this is a **paid service** based upon what you're "defending" so if you don't want to pay-to-play just ensure you don't enable the plan on any running resources and switch it off after the 30-day trial runs out. More info is available [here](https://docs.microsoft.com/en-gb/azure/security-center/security-center-pricing?WT.mc_id=Portal-Microsoft_Azure_Security)
+You'll need to switch on **Azure Defender** to get access to some of the settings - this is a **paid service** based upon what you're "defending" so if you don't want to pay-to-play just ensure you don't enable the plan on any running resources and switch it off after the 30-day trial runs out. More info is available [here](https://docs.microsoft.com/en-gb/azure/security-center/security-center-pricing?WT.mc_id=Portal-Microsoft_Azure_Security)
 
-I'm just going to be switching on Azure Defender for Azure Container Registry but you can enable it for a whole swag of different services: VirtualMachines, SqlServers, AppServices, StorageAccounts, SqlServerVirtualMachines, KubernetesService, ContainerRegistry, KeyVaults, Dns, Arm, OpenSourceRelationalDatabases
+I'm just going to be switching on Azure Defender for Azure Container Registry but you can enable it for a whole swag of different services: ``VirtualMachines, SqlServers, AppServices, StorageAccounts, SqlServerVirtualMachines, KubernetesService, ContainerRegistry, KeyVaults, Dns, Arm, OpenSourceRelationalDatabases``
 
 {% highlight bash %}
 
@@ -65,7 +65,7 @@ Once on the integrations page you'll want to click the **Configure CI/CD integra
 
 [![image-center](/assets/images/asc_integrations.png)](/assets/images/asc_integrations.png){: .align-center}
 
-[![image-left](/assets/images/asc_cicd.png)](/assets/images/asc_cicd.png){: .align-left} As of now there's only two regions where you can set your default workspace. Choosing one or the other will update your **Connection String**. The **Authentication Token** is generated for you based upon your **subscriptionId**.
+[![image-left](/assets/images/asc_cicd.png)](/assets/images/asc_cicd.png){: .align-left} As of now there's only two regions where you can set your default workspace and choosing one or the other will update your **Connection String**. The **Authentication Token** is generated for you based upon your **subscriptionId**.
 
 You'll need to copy both the **Connection String** and the **Authentication Token** as we'll be saving them as [Encrypted Secrets in GitHub](https://docs.github.com/en/actions/reference/encrypted-secrets)
 
@@ -73,9 +73,9 @@ If only we could've just pulled this data using the Azure CLI.
 
 ## Create Encrypted Secrets in GitHub for Azure Security Center
 
-To set up the authenticated integration between GitHub and Azure Security Center we need to set our authentication tokens as Encrypted Secrets into GitHub.
+To set up the authenticated integration between GitHub and Azure Security Center we need to save our authentication tokens as Encrypted Secrets into GitHub.
 
-The [GitHub CLI](https://github.com/cli/cli) provides a simple method of [setting your secrets](https://cli.github.com/manual/gh_secret_set). I've done it the lazy way just *copy+pasting* but it's possible to use Environment Variables or [File Redirection](https://www.gnu.org/software/bash/manual/html_node/Redirections.html)
+The [GitHub CLI](https://github.com/cli/cli) provides a simple method of [setting your secrets](https://cli.github.com/manual/gh_secret_set). I've done it the lazy way just *copy+pasting* into the command prompt but it's possible to use Environment Variables or [File Redirection](https://www.gnu.org/software/bash/manual/html_node/Redirections.html) if you're wanting to potentially script the process.
 
 {% highlight bash %}
 
@@ -99,9 +99,9 @@ Here we can see them present in GitHub web console under **Settings > Secrets**
 
 ## Consuming Secrets using GitHub Actions
 
-We're getting closer to the good stuff now. Here I'll be updating an existing GitHub Actions workflow which pushes **myapplication** into Azure Container Registry. If you don't already have ACR up and running you can check out this [blog post](/technology/enable-azure-container-registry/).
+We're getting closer to the good stuff now. Here I'll be updating an existing GitHub Actions workflow which pushes ``myapplication`` into Azure Container Registry. If you don't already have ACR up and running you can check out this [blog post](/technology/enable-azure-container-registry/) on how to do that.
 
-We need to add in two additional steps
+We need to add in two additional steps into our workflow file.
 
 - Scan image for vulnernabilities
 - Post scan results to ASC
@@ -157,7 +157,7 @@ jobs:
 
 I deliberately made some tweaks to my Dockerfile to force it to get some vulnerabilities as we can see in the following screenshots.
 
-In your repo navigate to **Actions > Your Action** otherwise you can also use the ``github cli``
+In your repo navigate to **Actions > {Your Action}** otherwise you can also use the ``github cli``.
 
 {% highlight bash %}
 
@@ -173,9 +173,6 @@ X  demo                                                demo  master  push  94491
 X  fixing CI error                                     demo  master  push  944898002
 X  removing the distroless step and amending workflow  demo  master  push  944893062
 ✓  updating push workflow for container scanning       demo  master  push  944690742
-
-To see more runs for this workflow, try: gh run list --workflow push.yml
-To see the YAML for this workflow, try: gh workflow view push.yml --yaml
 
 $ gh run view 944934764 --repo bradtho/myapplication
 
@@ -193,7 +190,7 @@ demo: .github#1
 
 [![image-center](/assets/images/asc_workflow.png)](/assets/images/asc_workflow.png){: .align-center}
 
-The workflow found some vulnerabilities so let's drill into the job to see the events
+The workflow found some vulnerabilities so let's drill into the job to see the events.
 
 {% highlight bash %}
 
@@ -221,7 +218,7 @@ From the Azure Security Center navigate to the Recommendations page and select t
 
 [![image-center](/assets/images/asc_policy.png)](/assets/images/asc_policy.png){: .align-center}
 
-No Vulnerabilities? OK let's drill into this some more - select **Affected Resources** and click the **Healthy Registries** tab > your registry > your repository > take a note of the Image Tag
+No Vulnerabilities detected :interrobang: OK let's drill into this some more then - select **Affected Resources** and click the **Healthy Registries** tab > ``{your registry}`` > ``{your repository}`` > take a note of the ``{Image Tag}``
 
 [![image-center](/assets/images/asc_healthy_1.png)](/assets/images/asc_healthy_1.png){: .align-center}
 
@@ -229,19 +226,19 @@ No Vulnerabilities? OK let's drill into this some more - select **Affected Resou
 
 [![image-center](/assets/images/asc_healthy_3.png)](/assets/images/asc_healthy_3.png){: .align-center}
 
-So I'm not too sure what's going on here. Is there a difference in policy? Is there a false positive coming from GitHub with the logs being shipped successfully?
+So I'm not too sure what's going on here. Is there a difference in policy? Is there a false positive coming from GitHub even with the logs being shipped successfully?
 
 ## Troubleshooting
 
 Let's see what Azure is considering as a scanned image.
 
-First test we'll put a break in the workflow to not report the findings.
+First test we'll comment out the ``Post Logs to ASC`` step in the workflow to not report the findings.
 
-✓ ``Not Scanned``
+:white_check_mark: ``Not Scanned``
 
-Second test we'll then remove the break and observe the results.
+Second test we'll then uncomment and observe the results.
 
-✓ ``Found``
+:white_check_mark: ``Found``
 
 We can see that the reports are correctly being sent to Azure but Azure Security Center isn't considering the image vulnerable - even though there are CVE's being reported in the GitHub Actions output.
 
@@ -253,7 +250,7 @@ I decided to rewatch the [Scaling DevSecOps with GitHub and Azure](https://mybui
 
 Lo and behold there's a completely different set of results for this image than with my own.
 
-We get a bunch of vulnerabilities as we did in my own application image.
+I get a bunch of vulnerabilities as I did in my own application image.
 
 [![image-center](/assets/images/asc_troubleshoot_2.png)](/assets/images/asc_troubleshoot_2.png){: .align-center}
 

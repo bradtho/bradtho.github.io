@@ -6,12 +6,12 @@ tags: azure containers
 classes: wide
 ---
 
-> When writing my post about [setting up CICD Integration between GitHub and Azure Security Center](/technology/github-and-azure-security/) I quickly realised that on of the major components was setting up Azure Container Registry (ACR) yet bogging down the reader with a full how-to of setting up programmatic access between GitHub Actions and ACR would detract from the main purpose of showing how Container Scanning works. So here's a side-post on how to get ACR up and running with a Service Principal that you can use with GitHub Actions.
+> When writing my post about [setting up CICD Integration between GitHub and Azure Security Center](/technology/github-and-azure-security/) I quickly realised that one of the major components was setting up Azure Container Registry (ACR). I really didn't want to bog down the reader with a full how-to of setting up programmatic access between GitHub Actions and ACR and felt it would detract from the main purpose of showing how Container Scanning works. So here's a side-post on how to get ACR up and running with a Service Principal that you can use with GitHub Actions.
 {: .notice--success}
 
 ### Create an Azure Container Registry
 
-Setting up ACR is a fairly trivial process. Create a resource group and stick ACR into it. However, as with most things that are simple integration can be a little bit tedious as you'll see as we move through the steps. Also, [here's](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-best-practices) some design considerations for ACR - definitely worth a read if you're wanting to use ACR in production.
+Setting up ACR is a fairly trivial process. Create a resource group and stick ACR into it. However, as with most things that are simple to install, the integration can be a little bit tedious as you'll see as we move through the steps. Also, [here's](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-best-practices) some design considerations for ACR - definitely worth a read if you're wanting to use ACR in production.
 
 {% highlight bash %}
 
@@ -104,7 +104,7 @@ bradlab
 
 ## Programmatic access to ACR
 
-How do we access our new Azure Container Registry when we will be using GitHub Actions to run our pipeline? Normally we'd just be able to run a ``az acr login --name {registry-name}`` but I doubt anyone wants to be storing their Azure Credentials (even as encrypted secrets) anywhere other than their favour password manager.
+How do we access our new Azure Container Registry when we will be using GitHub Actions to run our pipeline? Normally we'd just be able to run ``az acr login --name {registry-name}`` but I doubt anyone wants to be storing their Azure Credentials (even as encrypted secrets) anywhere other than their favour password manager.
 
 Enter Service Principals - [here's](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) an explanation of how they work and when to use them. We're going to create a Service Principal for our GitHub Actions and then give it permission to login to our Azure Container Registry.
 
@@ -135,7 +135,7 @@ $az ad sp create-for-rbac --appId "bradlab-acr-sp" --role contributor --scopes /
 
 $az ad sp credential reset --name azenix-acr-sp
 
-## Now we need to give our Service Principal the ability to Push Images to ACR.
+## Now we need to give our Service Principal the ability to Push Images to ACR
 
 $az role assignment create --assignee {clientId} --scope /subscriptions/{subscriptionId}/resourceGroups/bradlab-acr-rg/providers/Microsoft.ContainerRegistry/registries/bradlab --role acrpush
 
@@ -148,7 +148,7 @@ $az role assignment create --assignee {clientId} --scope /subscriptions/{subscri
 
 To set up the authenticated integration between GitHub and Azure Container Registry we need to set our Service Principal {clientId} and {clientSecret} as Encrypted Secrets into GitHub.
 
-The [GitHub CLI](https://github.com/cli/cli) provides a simple method of [setting your secrets](https://cli.github.com/manual/gh_secret_set). I've done it the lazy way just *copy+pasting* but it's possible to use Environment Variables or [File Redirection](https://www.gnu.org/software/bash/manual/html_node/Redirections.html)
+The [GitHub CLI](https://github.com/cli/cli) provides a simple method of [setting your secrets](https://cli.github.com/manual/gh_secret_set). I've done it the lazy way just *copy+pasting* into the command prompt but it's possible to use Environment Variables or [File Redirection](https://www.gnu.org/software/bash/manual/html_node/Redirections.html)
 
 {% highlight bash %}
 
@@ -193,7 +193,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code into the Go module directory
+    - name: Check out code 
       uses: actions/checkout@main
 
     - name: Login to Azure Container Registry
@@ -211,7 +211,7 @@ jobs:
 
 {% endhighlight %}
 
-We can see that this Workflow has passed and the Docker Image is now in ACR. Unfortunately I didn't tag these properly so one is the short hash and the other is the full hash but you'll see that they're the same image.
+We can see that this Workflow has passed :white_check_mark: and the Docker Image is now in ACR. Unfortunately I didn't tag these properly so one is the short hash and the other is the full hash but you'll see that they're the same image.
 
 [![image-center](/assets/images/acr_workflow.png)](/assets/images/acr_workflow.png){: .align-center}
 
