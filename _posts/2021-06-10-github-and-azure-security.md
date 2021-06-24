@@ -19,7 +19,7 @@ Obviously please do go checkout the original blog post available [here](https://
 
 I'm going to assume you already have an Azure Subscription to use - otherwise you can setup a [free account](https://azure.microsoft.com/en-gb/free/). This will give you Azure Security Center from which we'll be switching on the Azure Defender.
 
-> If you don't already have an Azure Container Registry (ACR) setup [here's a post](/technology/enable-azure-container-registry.md) on how to do that and get it setup with GitHub Actions to push container images up to the registry.
+> If you don't already have an Azure Container Registry (ACR) setup [here's a post](/technology/enable-azure-container-registry) on how to do that and get it setup with GitHub Actions to push container images up to the registry.
 {: .notice--warning}
 
 I'm also going to write ~~all~~ ~~most~~ as many as I can of the commands using ``azure CLI`` and ``github CLI``. I may one day write a port for ``Powershell`` but I'm sure if you're using Powershell you'll already know what to do :wink:

@@ -219,5 +219,5 @@ We can see that this Workflow has passed :white_check_mark: and the Docker Image
 
 Alternatively you can use the ``gh cli`` and ``az cli`` to perform these validations.
 
->Now that we're all set with Azure Container Registry and can Build and Push your Docker Images using GitHub Actions it's a good idea to checkout how you can scan those images for vulnerabilities. You can see a demonstration on how to achieve this in [this post](/technology/enable-azure-container-registry.md)
+>Now that we're all set with Azure Container Registry and can Build and Push your Docker Images using GitHub Actions it's a good idea to checkout how you can scan those images for vulnerabilities. You can see a demonstration on how to achieve this in [this post](/technology/enable-azure-container-registry)
 {: .notice--success}
